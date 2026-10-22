@@ -24,7 +24,7 @@ An educational UI automation portfolio project for the [SauceDemo](https://www.s
 - Verify that two different products can be added and both appear in the cart.
 - Verify that a product can be removed from the cart.
 
-The tests use Playwright locators and assertions, a reusable login helper, pytest's `@pytest.mark.parametrize`, and pytest-playwright's `page` fixture.
+The tests use Playwright locators and assertions, pytest's `@pytest.mark.parametrize`, the Playwright-provided `page` fixture, and a custom `logged_in_page` fixture that prepares a fresh authenticated page for each cart test.
 
 ## Install locally
 
