@@ -13,6 +13,13 @@ def login(page: Page, username: str = USERNAME, password: str = PASSWORD):
     page.locator('[data-test="login-button"]').click()
 
 
+@pytest.fixture
+def logged_in_page(page: Page) -> Page:
+    """Return a fresh browser page after a successful login."""
+    login(page)
+    return page
+
+
 def test_login_page_is_displayed(page: Page):
     page.goto(BASE_URL)
 
@@ -78,46 +85,40 @@ def test_locked_out_user_cannot_login(page: Page):
     expect(page).to_have_url(BASE_URL)
 
 
-def test_user_can_add_product_to_cart(page: Page):
-    login(page)
+def test_user_can_add_product_to_cart(logged_in_page: Page):
+    logged_in_page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
 
-    page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    expect(logged_in_page.locator(".shopping_cart_badge")).to_have_text("1")
 
-    expect(page.locator(".shopping_cart_badge")).to_have_text("1")
+    logged_in_page.locator(".shopping_cart_link").click()
 
-    page.locator(".shopping_cart_link").click()
-
-    expect(page).to_have_url(f"{BASE_URL}cart.html")
-    expect(page.locator('[data-test="inventory-item-name"]')).to_have_text(
+    expect(logged_in_page).to_have_url(f"{BASE_URL}cart.html")
+    expect(logged_in_page.locator('[data-test="inventory-item-name"]')).to_have_text(
         ["Sauce Labs Backpack"]
     )
 
 
-def test_user_can_add_two_products_to_cart(page: Page):
-    login(page)
+def test_user_can_add_two_products_to_cart(logged_in_page: Page):
+    logged_in_page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    logged_in_page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click()
 
-    page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-    page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click()
+    expect(logged_in_page.locator(".shopping_cart_badge")).to_have_text("2")
 
-    expect(page.locator(".shopping_cart_badge")).to_have_text("2")
+    logged_in_page.locator(".shopping_cart_link").click()
 
-    page.locator(".shopping_cart_link").click()
-
-    expect(page.locator('[data-test="inventory-item-name"]')).to_have_count(2)
-    expect(page.locator('[data-test="inventory-item-name"]')).to_have_text(
-        ["Sauce Labs Backpack", "Sauce Labs Bike Light"]
-    )
+    items = logged_in_page.locator('[data-test="inventory-item-name"]')
+    expect(items).to_have_count(2)
+    expect(items).to_have_text(["Sauce Labs Backpack", "Sauce Labs Bike Light"])
 
 
-def test_user_can_remove_product_from_cart(page: Page):
-    login(page)
+def test_user_can_remove_product_from_cart(logged_in_page: Page):
+    logged_in_page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    logged_in_page.locator(".shopping_cart_link").click()
 
-    page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-    page.locator(".shopping_cart_link").click()
+    items = logged_in_page.locator('[data-test="inventory-item-name"]')
+    expect(items).to_have_count(1)
 
-    expect(page.locator('[data-test="inventory-item-name"]')).to_have_count(1)
+    logged_in_page.locator('[data-test="remove-sauce-labs-backpack"]').click()
 
-    page.locator('[data-test="remove-sauce-labs-backpack"]').click()
-
-    expect(page.locator('[data-test="inventory-item-name"]')).to_have_count(0)
-    expect(page.locator(".shopping_cart_badge")).to_have_count(0)
+    expect(items).to_have_count(0)
+    expect(logged_in_page.locator(".shopping_cart_badge")).to_have_count(0)
