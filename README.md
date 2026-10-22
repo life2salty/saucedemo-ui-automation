@@ -1,25 +1,28 @@
 # UI Test Automation — SauceDemo
 
-## About the Project
+An educational UI automation portfolio project for the [SauceDemo](https://www.saucedemo.com/) demo e-commerce application.
 
-An educational UI test automation project for the [SauceDemo](https://www.saucedemo.com/) demo e-commerce application.
-
-The project uses Python, Playwright, and pytest to verify basic login and shopping cart functionality.
-
-## Tech Stack
+## Tech stack
 
 - Python
 - Playwright
 - pytest
 - Chromium
+- GitHub Actions
 
-## Automated Test Scenarios
+## Automated scenarios
 
-1. Verify that the login page displays the username, password, and login button.
-2. Verify that a user can log in with valid credentials.
-3. Verify that a user can add a product to the shopping cart and see it in the cart.
+1. Verify that the login form is displayed.
+2. Verify login with valid credentials.
+3. Verify that login is rejected when the password is incorrect.
+4. Verify that a product can be added to the cart.
+5. Verify that a product can be removed from the cart.
 
-## Installation
+The tests use Playwright's locator assertions and pytest-playwright's `page` fixture.
+
+## Install locally
+
+Use Python 3.10 or newer.
 
 ```bash
 python -m venv .venv
@@ -28,14 +31,16 @@ python -m pip install -r requirements.txt
 python -m playwright install chromium
 ```
 
-## Run Tests
+## Run tests
 
 ```bash
-python -m pytest -v test_login.py
+python -m pytest -v
 ```
 
-## Project Status
+## Continuous integration
 
-Three automated UI test scenarios have been implemented and executed locally.
+GitHub Actions runs the UI tests on pushes and pull requests. See the [Actions tab](../../actions).
 
-This is a learning and portfolio project, not commercial QA experience.
+## Scope
+
+This is a learning portfolio project. It covers the five UI scenarios listed above and is not commercial QA experience. It does not claim comprehensive checkout, security, performance, or cross-browser coverage.
