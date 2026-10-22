@@ -12,15 +12,19 @@ An educational UI automation portfolio project for the [SauceDemo](https://www.s
 
 ## Automated scenarios
 
-1. Verify that the login form is displayed.
-2. Verify login with valid credentials.
-3. Verify that login is rejected when the password is incorrect.
-4. Verify that a locked-out user cannot log in.
-5. Verify that a product can be added to the cart.
-6. Verify that two different products can be added and both appear in the cart.
-7. Verify that a product can be removed from the cart.
+- Verify that the login form is displayed.
+- Verify login with valid credentials.
+- Verify invalid login attempts using pytest parameterization:
+  - Incorrect password
+  - Incorrect username
+  - Empty username
+  - Empty password
+- Verify that a locked-out user cannot log in.
+- Verify that a product can be added to the cart.
+- Verify that two different products can be added and both appear in the cart.
+- Verify that a product can be removed from the cart.
 
-The tests use Playwright locators, assertions, a reusable login helper, and pytest-playwright's `page` fixture.
+The tests use Playwright locators and assertions, a reusable login helper, pytest's `@pytest.mark.parametrize`, and pytest-playwright's `page` fixture.
 
 ## Install locally
 
@@ -45,4 +49,4 @@ GitHub Actions runs the UI tests on pushes and pull requests. See the [Actions t
 
 ## Scope
 
-This is a learning portfolio project. It covers the seven UI scenarios listed above and is not commercial QA experience. It does not claim comprehensive checkout, security, performance, or cross-browser coverage.
+This is a learning portfolio project. The automated tests cover the scenarios listed above and are not commercial QA experience. They do not claim comprehensive checkout, security, performance, or cross-browser coverage.
