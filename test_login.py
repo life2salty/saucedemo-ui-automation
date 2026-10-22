@@ -1,3 +1,4 @@
+import pytest
 from playwright.sync_api import Page, expect
 
 BASE_URL = "https://www.saucedemo.com/"
@@ -33,6 +34,16 @@ def test_login_fails_with_invalid_password(page: Page):
     expect(page.locator('[data-test="error"]')).to_be_visible()
     expect(page.locator('[data-test="error"]')).to_contain_text(
         "Username and password do not match"
+    )
+    expect(page).to_have_url(BASE_URL)
+
+
+def test_locked_out_user_cannot_login(page: Page):
+    login(page, username="locked_out_user")
+
+    expect(page.locator('[data-test="error"]')).to_be_visible()
+    expect(page.locator('[data-test="error"]')).to_contain_text(
+        "Sorry, this user has been locked out."
     )
     expect(page).to_have_url(BASE_URL)
 
