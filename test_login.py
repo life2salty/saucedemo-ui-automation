@@ -63,6 +63,22 @@ def test_user_can_add_product_to_cart(page: Page):
     )
 
 
+def test_user_can_add_two_products_to_cart(page: Page):
+    login(page)
+
+    page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click()
+
+    expect(page.locator(".shopping_cart_badge")).to_have_text("2")
+
+    page.locator(".shopping_cart_link").click()
+
+    expect(page.locator('[data-test="inventory-item-name"]')).to_have_count(2)
+    expect(page.locator('[data-test="inventory-item-name"]')).to_have_text(
+        ["Sauce Labs Backpack", "Sauce Labs Bike Light"]
+    )
+
+
 def test_user_can_remove_product_from_cart(page: Page):
     login(page)
 
