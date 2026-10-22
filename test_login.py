@@ -28,13 +28,43 @@ def test_user_can_login(page: Page):
     expect(page.locator(".title")).to_have_text("Products")
 
 
-def test_login_fails_with_invalid_password(page: Page):
-    login(page, password="wrong_password")
+@pytest.mark.parametrize(
+    ("username", "password", "expected_error"),
+    [
+        pytest.param(
+            USERNAME,
+            "wrong_password",
+            "Username and password do not match",
+            id="wrong-password",
+        ),
+        pytest.param(
+            "wrong_user",
+            PASSWORD,
+            "Username and password do not match",
+            id="wrong-username",
+        ),
+        pytest.param(
+            "",
+            PASSWORD,
+            "Username is required",
+            id="empty-username",
+        ),
+        pytest.param(
+            USERNAME,
+            "",
+            "Password is required",
+            id="empty-password",
+        ),
+    ],
+)
+def test_login_rejected_for_invalid_credentials(
+    page: Page, username: str, password: str, expected_error: str
+):
+    login(page, username=username, password=password)
 
-    expect(page.locator('[data-test="error"]')).to_be_visible()
-    expect(page.locator('[data-test="error"]')).to_contain_text(
-        "Username and password do not match"
-    )
+    error = page.locator('[data-test="error"]')
+    expect(error).to_be_visible()
+    expect(error).to_contain_text(expected_error)
     expect(page).to_have_url(BASE_URL)
 
 
